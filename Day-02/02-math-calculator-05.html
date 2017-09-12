@@ -57,23 +57,9 @@
 		};
 
 		function onBtnClick(evt){
-			var btnValue = evt.target.value;
+			var operator = evt.target.value.toLowerCase();;
 			var operands = getOperands();
-			var result = 0;
-			switch(btnValue){
-				case 'Add':
-					result = calculator.add(operands);
-					break;
-				case 'Subtract':
-					result = calculator.subtract(operands);
-					break;
-				case 'Multiply':
-					result = calculator.multiply(operands);
-					break;
-				case 'Divide':
-					result = calculator.divide(operands);
-					break;
-			}
+			var result = calculator[operator](operands);
 			document.getElementById('divResult').innerHTML = result;
 		}
 

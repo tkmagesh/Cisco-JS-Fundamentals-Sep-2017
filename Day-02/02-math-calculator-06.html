@@ -19,17 +19,9 @@
 		window.addEventListener('DOMContentLoaded', init);
 		
 		function init(){
-			var btnAdd = document.getElementById('btnAdd');
-			btnAdd.addEventListener('click', onBtnClick);
-
-			var btnSubtract = document.getElementById('btnSubtract');
-			btnSubtract.addEventListener('click', onBtnClick);
-
-			var btnMultiply = document.getElementById('btnMultiply');
-			btnMultiply.addEventListener('click', onBtnClick);
-
-			var btnDivide = document.getElementById('btnDivide');
-			btnDivide.addEventListener('click', onBtnClick);
+			var btns = document.getElementsByClassName('btn-operator');
+			for(var index = 0, count = btns.length; index < count; index++)
+				btns[index].addEventListener('click', onBtnClick);
 		}
 
 		function getOperands(){
@@ -57,23 +49,9 @@
 		};
 
 		function onBtnClick(evt){
-			var btnValue = evt.target.value;
+			var operator = evt.target.value.toLowerCase();;
 			var operands = getOperands();
-			var result = 0;
-			switch(btnValue){
-				case 'Add':
-					result = calculator.add(operands);
-					break;
-				case 'Subtract':
-					result = calculator.subtract(operands);
-					break;
-				case 'Multiply':
-					result = calculator.multiply(operands);
-					break;
-				case 'Divide':
-					result = calculator.divide(operands);
-					break;
-			}
+			var result = calculator[operator](operands);
 			document.getElementById('divResult').innerHTML = result;
 		}
 
@@ -91,10 +69,10 @@
 		<input type="number" id="txtNumber2">
 	</div>
 	<div class="field">
-		<input type="button" id="btnAdd" value="Add">
-		<input type="button" id="btnSubtract" value="Subtract">
-		<input type="button" id="btnMultiply" value="Multiply">
-		<input type="button" id="btnDivide" value="Divide">
+		<input type="button" id="btnAdd" class="btn-operator" value="Add">
+		<input type="button" id="btnSubtract" class="btn-operator" value="Subtract">
+		<input type="button" id="btnMultiply" class="btn-operator" value="Multiply">
+		<input type="button" id="btnDivide" class="btn-operator" value="Divide">
 	</div>
 	<div class="field">
 		<div id="divResult">[Result]</div>
