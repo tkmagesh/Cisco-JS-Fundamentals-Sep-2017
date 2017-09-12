@@ -43,3 +43,100 @@ function printEvenNumbers(){
 	for(var i=0; i <= 20; i+=2)
 		console.log(i);
 }
+
+function isPrime(n){
+	if (n < 3) return true;
+	for(var index=2; index <= (n/2); index++){
+		if (n % index === 0){
+			return false;
+			break;
+		}
+	}
+	return true;
+}
+
+function sum(list){
+	var result = 0;
+	for(var index = 0, count = list.length; index < count; index++){
+		result += list[index];
+	}
+	return result;
+}
+
+function getEvenNumbers(list){
+	var evenNumbers = [];
+	for(var index = 0, count = list.length; index < count; index++){
+		if (list[index] % 2 === 0){
+			evenNumbers.push(list[index]);
+		}
+	}
+	return evenNumbers;
+}
+
+/*function getOddEvenCount(list){
+	var evenCount = 0, 
+		oddCount = 0;
+	for(var index = 0, count = list.length; index < count; index++){
+		if (list[index] % 2 === 0){
+			++evenCount;
+		} else {
+			++oddCount;
+		}
+	}
+	return {
+		even : evenCount,
+		odd : oddCount
+	}
+}*/
+
+/*function getOddEvenCount(list){
+	var result = {
+		even : 0,
+		odd : 0
+	};
+	for(var index = 0, count = list.length; index < count; index++){
+		if (list[index] % 2 === 0){
+			++result.even;
+		} else {
+			++result.odd;
+		}
+	}
+	return result;
+}*/
+
+function getOddEvenCount(list){
+	var result = {
+		even : 0,
+		odd : 0
+	};
+	for(var index = 0, count = list.length; index < count; index++){
+		var key = list[index] % 2 === 0 ? 'even' : 'odd';
+		++result[key];
+	}
+	return result;
+}
+
+var products = [
+    {id : 100, name : 'Pen', cost : 5, category:'stationary'},
+    {id : 101, name : 'Pencil', cost : 2, category:'stationary'},
+    {id : 102, name : 'Marker', cost : 35, category:'stationary'},
+    {id : 201, name : 'Veg', cost : 100, category:'grocery'},
+    {id : 202, name : 'Lentil', cost : 50, category:'grocery'},
+    {id : 301, name : 'Shirt', cost : 300, category:'apparel'},
+    {id : 302, name : 'Pants', cost : 600, category:'apparel'},
+    {id : 401, name : 'Hammer', cost : 250, category : 'utility'}
+];
+
+function aggregateProducts(products){
+	var result = {};
+	for(var index=0, count=products.length; index < count; index++){
+		var key = products[index].category;
+		/*if (typeof result[key] === 'undefined')
+			result[key] = 0;*/
+		result[key] = result[key] || 0;
+		result[key] += products[index].cost;
+	}
+	return result;
+}
+// => {stationary : sum of stationary products, 
+//		grocery : sum of grocery products...}
