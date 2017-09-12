@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Math Calculator</title>
+	<style>
+		.field{
+			margin-bottom: 10px;
+		}
+		label{
+			display: block;
+		}
+		#divResult{
+			color : red;
+			font-size: 22pt;
+		}
+	</style>
+</head>
+<body>
+	<h1>Math Calculator</h1>
+	<hr>
+	<div class="field">
+		<label for="">Number 1:</label>
+		<input type="number" id="txtNumber1">
+	</div>
+	<div class="field">
+		<label for="">Number 2:</label>
+		<input type="number" id="txtNumber2">
+	</div>
+	<div class="field">
+		<input type="button" id="btnAdd" value="Add">
+		<input type="button" id="btnSubtract" value="Subtract">
+		<input type="button" id="btnMultiply" value="Multiply">
+		<input type="button" id="btnDivide" value="Divide">
+	</div>
+	<div class="field">
+		<div id="divResult">[Result]</div>
+	</div>
+</body>
+</html>

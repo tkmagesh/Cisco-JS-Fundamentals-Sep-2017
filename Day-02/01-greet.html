@@ -3,10 +3,26 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Greeter</title>
+	<script>
+		function greet(){
+			var txtUserName = document.getElementById('txtUserName');
+			var divMessage = document.getElementById('divMessage');
+			var name = txtUserName.value;
+			var message = 'Hi ' + name + ', Have a nice day!';
+			divMessage.innerHTML = message;
+		}
+		function init(){
+			var btnGreet = document.getElementById('btnGreet');
+			btnGreet.addEventListener('click', greet);
+		}
+		window.addEventListener('DOMContentLoaded', init);
+	</script>
 </head>
 <body>
 	<label for="">Name :</label>
 	<input type="text" id="txtUserName">
-	<div id="divMessage"></div>
+	<input type="button" value="Greet" id="btnGreet">
+	<div id="divMessage">[Message]</div>
+
 </body>
 </html>
