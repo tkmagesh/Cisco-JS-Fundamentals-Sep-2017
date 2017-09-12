@@ -17,6 +17,7 @@
 	</style>
 	<script>
 		window.addEventListener('DOMContentLoaded', init);
+		
 		function init(){
 			var btnAdd = document.getElementById('btnAdd');
 			btnAdd.addEventListener('click', onBtnAddClick);
@@ -31,31 +32,54 @@
 			btnDivide.addEventListener('click', onBtnDivideClick);
 		}
 
-		function onBtnAddClick(){
+		function getOperands(){
 			var n1 = document.getElementById('txtNumber1').valueAsNumber,
 				n2 = document.getElementById('txtNumber2').valueAsNumber;
-			var result = n1 + n2;
+			return {
+				n1 : n1,
+				n2 : n2
+			};
+		}
+
+		var calculator = {
+			add : function(operations){
+				return operations.n1 + operations.n2
+			},
+			subtract : function(operations){
+				return operations.n1 - operations.n2
+			},
+			multiply : function(operations){
+				return operations.n1 * operations.n2
+			},
+			divide : function(operations){
+				return operations.n1 / operations.n2
+			},
+		};
+
+		
+
+		function onBtnAddClick(evt){
+			console.dir(evt);
+			var operands = getOperands();
+			var result = calculator.add(operands);
 			document.getElementById('divResult').innerHTML = result;
 		}
 
 		function onBtnSubtractClick(){
-			var n1 = document.getElementById('txtNumber1').valueAsNumber,
-				n2 = document.getElementById('txtNumber2').valueAsNumber;
-			var result = n1 - n2;
+			var operands = getOperands();
+			var result = calculator.subtract(operands);
 			document.getElementById('divResult').innerHTML = result;
 		}
 
 		function onBtnMultiplyClick(){
-			var n1 = document.getElementById('txtNumber1').valueAsNumber,
-				n2 = document.getElementById('txtNumber2').valueAsNumber;
-			var result = n1 * n2;
+			var operands = getOperands();
+			var result = calculator.multiply(operands);
 			document.getElementById('divResult').innerHTML = result;
 		}
 
 		function onBtnDivideClick(){
-			var n1 = document.getElementById('txtNumber1').valueAsNumber,
-				n2 = document.getElementById('txtNumber2').valueAsNumber;
-			var result = n1 / n2;
+			var operands = getOperands();
+			var result = calculator.divide(operands);
 			document.getElementById('divResult').innerHTML = result;
 		}
 	</script>

@@ -31,31 +31,37 @@
 			btnDivide.addEventListener('click', onBtnDivideClick);
 		}
 
-		function onBtnAddClick(){
+		function getOperands(){
 			var n1 = document.getElementById('txtNumber1').valueAsNumber,
 				n2 = document.getElementById('txtNumber2').valueAsNumber;
-			var result = n1 + n2;
+			return {
+				n1 : n1,
+				n2 : n2
+			};
+		}
+
+		
+		function onBtnAddClick(){
+			var operands = getOperands();
+			var result = operands.n1 + operands.n2;
 			document.getElementById('divResult').innerHTML = result;
 		}
 
 		function onBtnSubtractClick(){
-			var n1 = document.getElementById('txtNumber1').valueAsNumber,
-				n2 = document.getElementById('txtNumber2').valueAsNumber;
-			var result = n1 - n2;
+			var operands = getOperands();
+			var result = operands.n1 - operands.n2;
 			document.getElementById('divResult').innerHTML = result;
 		}
 
 		function onBtnMultiplyClick(){
-			var n1 = document.getElementById('txtNumber1').valueAsNumber,
-				n2 = document.getElementById('txtNumber2').valueAsNumber;
-			var result = n1 * n2;
+			var operands = getOperands();
+			var result = operands.n1 * operands.n2;
 			document.getElementById('divResult').innerHTML = result;
 		}
 
 		function onBtnDivideClick(){
-			var n1 = document.getElementById('txtNumber1').valueAsNumber,
-				n2 = document.getElementById('txtNumber2').valueAsNumber;
-			var result = n1 / n2;
+			var operands = getOperands();
+			var result = operands.n1 / operands.n2;
 			document.getElementById('divResult').innerHTML = result;
 		}
 	</script>
