@@ -14,6 +14,9 @@
 			color : red;
 			font-size: 22pt;
 		}
+		.error{
+			color : red;
+		}
 	</style>
 	<script>
 		window.addEventListener('DOMContentLoaded', init);
@@ -48,8 +51,48 @@
 			}
 		};
 
+		function resetErrors(){
+			var errorSpans = document.getElementsByClassName('error');
+			for(var index=0, count = errorSpans.length; index < count; index++){
+				errorSpans[index].innerHTML = '';
+			}
+		}
+		function displayErrors(errors){
+			for(var index=0, count = errors.length; index < count; index++){
+				var error = errors[index];
+				var errorSpan = document.getElementById(error.key + '-Error');
+				errorSpan.innerHTML = error.message;
+			}
+			return;		
+		}
+		function validateOperands(){
+			var errors = [];
+			var n1Value = document.getElementById('txtNumber1').valueAsNumber;
+			if (isNaN(n1Value)){
+				var error = {
+					key : 'number1',
+					message : 'Invalid value in number1'
+				}
+				errors.push(error);
+			}
+			var n2Value = document.getElementById('txtNumber2').valueAsNumber;
+			if (isNaN(n2Value)){
+				var error = {
+					key : 'number2',
+					message : 'Invalid value in number2'
+				}
+				errors.push(error);
+			}
+			return errors;
+		}
 		function onBtnClick(evt){
-			var operator = evt.target.value.toLowerCase();;
+			resetErrors();
+			var errors = validateOperands();
+			if (errors.length){
+				displayErrors(errors);
+				return;
+			}
+			var operator = evt.target.value.toLowerCase();
 			var operands = getOperands();
 			var result = calculator[operator](operands);
 			document.getElementById('divResult').innerHTML = result;
@@ -63,10 +106,12 @@
 	<div class="field">
 		<label for="">Number 1:</label>
 		<input type="number" id="txtNumber1">
+		<span id="number1-Error" class="error"></span>
 	</div>
 	<div class="field">
 		<label for="">Number 2:</label>
 		<input type="number" id="txtNumber2">
+		<span id="number2-Error" class="error"></span>
 	</div>
 	<div class="field">
 		<input type="button" id="btnAdd" class="btn-operator" value="Add">
