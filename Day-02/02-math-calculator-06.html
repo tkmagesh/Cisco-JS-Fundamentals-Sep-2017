@@ -18,6 +18,7 @@
 			color : red;
 		}
 	</style>
+	<script src="calculator.js"></script>
 	<script>
 		window.addEventListener('DOMContentLoaded', init);
 		
@@ -35,21 +36,6 @@
 				n2 : n2
 			};
 		}
-
-		var calculator = {
-			add : function(operands){
-				return operands.n1 + operands.n2;
-			},
-			subtract : function(operands){
-				return operands.n1 - operands.n2;
-			},
-			multiply : function(operands){
-				return operands.n1 * operands.n2;
-			},
-			divide : function(operands){
-				return operands.n1 / operands.n2;
-			}
-		};
 
 		function resetErrors(){
 			var errorSpans = document.getElementsByClassName('error');

@@ -8,19 +8,93 @@
 			color : red;
 			font-size: 22pt;
 		}
+		.error{
+			color : red;
+		}
 	</style>
+	<script src="calculator.js"></script>
+	<script>
+		window.addEventListener('DOMContentLoaded', init);
+		function init(){
+			var btnCalculate = document.getElementById('btnCalculate');
+			btnCalculate.addEventListener('click', calculate);
+			var t1 = document.getElementById('txtNumber1');
+			t1.addEventListener('keyup', calculate);
+			var t2 = document.getElementById('txtNumber2');
+			t2.addEventListener('keyup', calculate);
+			var selectOperator = document.getElementById('selectOperator');
+			selectOperator.addEventListener('change', calculate);
+		}
+
+		function getOperands(){
+			var n1 = document.getElementById('txtNumber1').valueAsNumber,
+				n2 = document.getElementById('txtNumber2').valueAsNumber;
+			return {
+				n1 : n1,
+				n2 : n2
+			};
+		}
+
+		function resetErrors(){
+			var errorSpans = document.getElementsByClassName('error');
+			for(var index=0, count = errorSpans.length; index < count; index++){
+				errorSpans[index].innerHTML = '';
+			}
+		}
+		function displayErrors(errors){
+			for(var index=0, count = errors.length; index < count; index++){
+				var error = errors[index];
+				var errorSpan = document.getElementById(error.key + '-Error');
+				errorSpan.innerHTML = error.message;
+			}
+			return;		
+		}
+		function validateOperands(){
+			var errors = [];
+			var n1Value = document.getElementById('txtNumber1').valueAsNumber;
+			if (isNaN(n1Value)){
+				var error = {
+					key : 'number1',
+					message : 'Invalid value in number1'
+				}
+				errors.push(error);
+			}
+			var n2Value = document.getElementById('txtNumber2').valueAsNumber;
+			if (isNaN(n2Value)){
+				var error = {
+					key : 'number2',
+					message : 'Invalid value in number2'
+				}
+				errors.push(error);
+			}
+			return errors;
+		}
+		function calculate(){
+			resetErrors();
+			var errors = validateOperands();
+			console.log(errors);
+			if (errors.length){
+				displayErrors(errors);
+				return;
+			}
+			var operator = document.getElementById('selectOperator').value.toLowerCase();
+			var operands = getOperands();
+			var result = calculator[operator](operands);
+			document.getElementById('divResult').innerHTML = result;
+		}
+	</script>
 </head>
 <body>
 	<h1>Math Calculator</h1>
 	<hr>
-	<input type="number" id="txtNumber1">
+	<input type="number" id="txtNumber1"><span class="error" id="number1-Error"></span>
 	<select id="selectOperator">
 		<option value="add">Add</option>
 		<option value="subtract">Subtract</option>
 		<option value="multiply">Multiply</option>
 		<option value="divide">Divide</option>
 	</select>
-	<input type="number" id="txtNumber2">
+	<input type="number" id="txtNumber2"><span class="error" id="number2-Error"></span>
 	<input type="button" value="Calculate" id="btnCalculate">
 	<div id="divResult">[Result]</div>
 </body>

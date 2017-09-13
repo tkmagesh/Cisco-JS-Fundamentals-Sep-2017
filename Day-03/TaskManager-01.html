@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Manager</title>
+	<style>
+		.completed{
+			color : red;
+			text-decoration: line-through;
+			font-style: italic;
+			font-weight: bold;
+		}
+		section{
+			margin-bottom: 10px;
+		}
+		#olTaskList{
+			width: 500px;
+			list-style: none;
+			-webkit-padding-start : 0px;
+			-moz-padding-start : 0px;
+			-ms-padding-start : 0px;
+		}
+		li{
+			margin-bottom: 10px;
+			border-radius: 5px;
+			padding: 10px;
+			border: 1px solid gray;
+			background-color: #e7e7e7;
+			cursor: pointer;
+		}
+		.stats, li{
+			font-size: 20pt;
+		}
+		body{
+			margin-left: 50px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Task Manager</h1>
+	<hr>
+	<!-- <section class="stats">
+		<span class="completed">1</span>
+		<span> / </span>
+		<span>2</span>
+	</section> -->
+	<section class="edit">
+		<label for="">Task Name :</label>
+		<input type="text" name="" id="">
+		<input type="button" value="Add New" id="btnAdd">
+	</section>
+	<section class="list">
+		<ol id="olTaskList">
+			<li>This is task - 1</li>
+			<li class="completed">This is task - 2</li>
+		</ol>
+		<input type="button" value="Remove Completed" id="btnRemoveCompleted">
+	</section>
+</body>
+</html>
