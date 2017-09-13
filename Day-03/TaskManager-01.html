@@ -42,12 +42,15 @@
 
 		function init(){
 			olTaskList = document.getElementById('olTaskList');
-			olTaskList.addEventListener('click', onTaskItemClick);
+			
 
 			txtTaskName = document.getElementById('txtTaskName');
 
 			var btnAdd = document.getElementById('btnAdd');
 			btnAdd.addEventListener('click', onBtnAddClick);
+
+			var btnRemoveCompleted = document.getElementById('btnRemoveCompleted');
+			btnRemoveCompleted.addEventListener('click', onBtnRemoveCompletedClick);
 
 			var taskItems = olTaskList.children;
 			for(var index = 0, count = taskItems.length; index < count; index++){
@@ -65,7 +68,14 @@
 			olTaskList.appendChild(newTaskItem);
 		}
 		function onTaskItemClick(evt){
+			console.log('taskItem clicked');
 			evt.target.classList.toggle('completed');
+		}
+		function onBtnRemoveCompletedClick(){
+			for(var index = olTaskList.children.length-1; index >= 0; index--){
+				if (olTaskList.children[index].classList.contains('completed'))
+					olTaskList.removeChild(olTaskList.children[index]);
+			}
 		}
 	</script>
 </head>
