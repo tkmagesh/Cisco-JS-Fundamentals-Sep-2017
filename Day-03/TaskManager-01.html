@@ -42,6 +42,8 @@
 
 		function init(){
 			olTaskList = document.getElementById('olTaskList');
+			olTaskList.addEventListener('click', onTaskItemClick);
+
 			txtTaskName = document.getElementById('txtTaskName');
 
 			var btnAdd = document.getElementById('btnAdd');
@@ -54,8 +56,13 @@
 			}
 		}
 		function onBtnAddClick(){
-			var taskItem = '<li>' + txtTaskName.value + '</li>';
-			olTaskList.innerHTML += taskItem;
+			/*var taskItem = '<li>' + txtTaskName.value + '</li>';
+			olTaskList.innerHTML += taskItem;*/
+
+			var newTaskItem = document.createElement('li');
+			newTaskItem.innerHTML = txtTaskName.value;
+			newTaskItem.addEventListener('click', onTaskItemClick);
+			olTaskList.appendChild(newTaskItem);
 		}
 		function onTaskItemClick(evt){
 			evt.target.classList.toggle('completed');
