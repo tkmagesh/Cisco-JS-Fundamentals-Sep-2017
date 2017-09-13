@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Manager</title>
+	<style>
+		.completed{
+			color : red;
+			text-decoration: line-through;
+			font-style: italic;
+			font-weight: bold;
+		}
+		section{
+			margin-bottom: 10px;
+		}
+		#olTaskList{
+			width: 500px;
+			list-style: none;
+			-webkit-padding-start : 0px;
+			-moz-padding-start : 0px;
+			-ms-padding-start : 0px;
+		}
+		li{
+			margin-bottom: 10px;
+			border-radius: 5px;
+			padding: 10px;
+			border: 1px solid gray;
+			background-color: #e7e7e7;
+			cursor: pointer;
+		}
+		.stats, li{
+			font-size: 20pt;
+		}
+		body{
+			margin-left: 50px;
+		}
+	</style>
+	<script>
+
+		function getTaskListModel(){
+			var list = [],
+				currentTaskId = 0,
+				subscribers = [];
+
+			function getList(){
+				return list.slice(0);
+			}
+
+			function addNew(taskName){
+				var newTask = {
+					id : ++currentTaskId,
+					name : taskName,
+					isCompleted : false
+				};
+				list.push(newTask);
+				triggerChange('add', newTask);
+			}
+			function triggerChange(evtName, data){
+				for(var index=0, count = subscribers.length; index < count; index++){
+					var subscriber = subscribers[index];
+					subscriber(evtName, data);
+				}
+			}
+			function toggle(taskId){
+				for(var index=0, count=list.length; index < count; index++){
+					var task = list[index];
+					if (task.id === parseInt(taskId,10)){
+						task.isCompleted = !task.isCompleted;
+						triggerChange('update', task);
+						return;
+					}
+				}
+			}
+			function removeClosed(){
+				for(var index=list.length-1; index >=0 ; index--){
+					var task = list[index];
+					if (task.isCompleted){
+						list.splice(index, 1);
+						triggerChange('remove', task);
+					}
+				}
+			}
+			function subscribe(fn){
+				subscribers.push(fn);
+			}
+			function getStats(){
+				var completedCount = 0;
+				for(var index=0; index < list.length; index++)
+					if (list[index].isCompleted)
+						++completedCount;
+				return {
+					total : list.length,
+					completed : completedCount
+				};
+			}
+			return {
+				addNew : addNew,
+				getList : getList,
+				toggle : toggle,
+				removeClosed : removeClosed,
+				subscribe : subscribe,
+				getStats : getStats
+			}
+		}
+
+		var taskList = getTaskListModel();
+
+		window.addEventListener('DOMContentLoaded', init);
+		var olTaskList,
+			txtTaskName;
+
+		function init(){
+			taskList.subscribe(onTaskListChange);
+			updateStats();
+			olTaskList = document.getElementById('olTaskList');
+			
+
+			txtTaskName = document.getElementById('txtTaskName');
+
+			var btnAdd = document.getElementById('btnAdd');
+			btnAdd.addEventListener('click', onBtnAddClick);
+
+			var btnRemoveCompleted = document.getElementById('btnRemoveCompleted');
+			btnRemoveCompleted.addEventListener('click', onBtnRemoveCompletedClick);
+		}
+
+		function onTaskListChange(changeType, task){
+			switch(changeType){
+				case 'add':
+					var newTaskItem = document.createElement('li');
+					newTaskItem.innerHTML = task.name;
+					newTaskItem.setAttribute("task-id", task.id);
+					newTaskItem.addEventListener('click', onTaskItemClick);
+					olTaskList.appendChild(newTaskItem);
+					break;
+				case 'update':
+					var taskItems = olTaskList.children;
+					for(var index = 0; index < taskItems.length; index++){
+						var taskItem = taskItems[index];
+						var id = taskItem.getAttribute('task-id');
+						if (id == task.id){
+							if (task.isCompleted){
+								taskItem.classList.add('completed');
+							} else {
+								taskItem.classList.remove('completed');
+							}
+						}
+					}
+					break;
+				case 'remove':
+					var taskItems = olTaskList.children;
+					for(var index = taskItems.length-1; index >= 0; index--){
+						var taskItem = taskItems[index];
+						var id = taskItem.getAttribute('task-id');
+						if (id == task.id){
+							olTaskList.removeChild(taskItem);
+						}
+					}
+			}
+			updateStats();
+		}
+		function updateStats(){
+			var stats = taskList.getStats();
+			console.log(stats);
+			document.getElementById('completedCount').innerHTML = stats.completed;
+			document.getElementById('totalCount').innerHTML = stats.total;
+		}
+		function onBtnAddClick(){
+			var taskName = txtTaskName.value;
+			taskList.addNew(taskName);
+		}
+		function onTaskItemClick(evt){
+			var taskId = evt.target.getAttribute('task-id');
+			taskList.toggle(taskId);
+		}
+		function onBtnRemoveCompletedClick(){
+			taskList.removeClosed();
+		}
+	</script>
+</head>
+<body>
+	<h1>Task Manager</h1>
+	<hr>
+	<section class="stats">
+		<span class="completed" id="completedCount">1</span>
+		<span> / </span>
+		<span id="totalCount">2</span>
+	</section>
+	<section class="edit">
+		<label for="">Task Name :</label>
+		<input type="text" id="txtTaskName">
+		<input type="button" value="Add New" id="btnAdd">
+	</section>
+	<section class="list">
+		<ol id="olTaskList">
+			
+		</ol>
+		<input type="button" value="Remove Completed" id="btnRemoveCompleted">
+	</section>
+</body>
+</html>
