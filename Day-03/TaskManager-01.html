@@ -35,6 +35,32 @@
 			margin-left: 50px;
 		}
 	</style>
+	<script>
+		window.addEventListener('DOMContentLoaded', init);
+		var olTaskList,
+			txtTaskName;
+
+		function init(){
+			olTaskList = document.getElementById('olTaskList');
+			txtTaskName = document.getElementById('txtTaskName');
+
+			var btnAdd = document.getElementById('btnAdd');
+			btnAdd.addEventListener('click', onBtnAddClick);
+
+			var taskItems = olTaskList.children;
+			for(var index = 0, count = taskItems.length; index < count; index++){
+				var taskItem = taskItems[index];
+				taskItem.addEventListener('click', onTaskItemClick);
+			}
+		}
+		function onBtnAddClick(){
+			var taskItem = '<li>' + txtTaskName.value + '</li>';
+			olTaskList.innerHTML += taskItem;
+		}
+		function onTaskItemClick(evt){
+			evt.target.classList.toggle('completed');
+		}
+	</script>
 </head>
 <body>
 	<h1>Task Manager</h1>
@@ -46,7 +72,7 @@
 	</section> -->
 	<section class="edit">
 		<label for="">Task Name :</label>
-		<input type="text" name="" id="">
+		<input type="text" id="txtTaskName">
 		<input type="button" value="Add New" id="btnAdd">
 	</section>
 	<section class="list">
