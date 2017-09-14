@@ -75,14 +75,28 @@
 				oReq.send();
 			}
 
+			function addNewReqListener () {
+			  var rawResponse= this.responseText;
+			  /*var responseData = JSON.parse(rawResponse);
+			  var tasks = responseData.tasks;*/
+
+			  var newTask = JSON.parse(rawResponse); //=> new line added for json server
+			  list.push(newTask);
+			  triggerChange('add', newTask);
+			}
+
 			function addNew(taskName){
 				var newTask = {
 					id : 0,
 					name : taskName,
 					isCompleted : false
 				};
-				list.push(newTask);
-				triggerChange('add', newTask);
+				var oReq = new XMLHttpRequest();
+				oReq.addEventListener("load", addNewReqListener);
+				oReq.open("POST", "http://localhost:3000/tasks");
+				oReq.setRequestHeader('content-type', 'application/json');
+				oReq.send(JSON.stringify(newTask));
+				
 			}
 			function triggerChange(evtName, data){
 				var eventSubscribers = subscribers[evtName];
@@ -91,13 +105,21 @@
 					subscriber(data);
 				}
 			}
+			function toggleReqListener(){
+				var rawResponse= this.responseText;
+			    var toggledTask = JSON.parse(rawResponse); 
+				triggerChange('update', toggledTask);
+			}
 			function toggle(taskId){
 				for(var index=0, count=list.length; index < count; index++){
 					var task = list[index];
 					if (task.id === parseInt(taskId,10)){
 						task.isCompleted = !task.isCompleted;
-						triggerChange('update', task);
-						return;
+						var oReq = new XMLHttpRequest();
+						oReq.addEventListener("load", toggleReqListener);
+						oReq.open("PUT", "http://localhost:3000/tasks/" + task.id);
+						oReq.setRequestHeader('content-type', 'application/json');
+						oReq.send(JSON.stringify(task));
 					}
 				}
 			}
@@ -107,6 +129,10 @@
 					if (task.isCompleted){
 						list.splice(index, 1);
 						triggerChange('remove', task);
+						var oReq = new XMLHttpRequest();
+						oReq.open("DELETE", "http://localhost:3000/tasks/" + task.id);
+						oReq.setRequestHeader('content-type', 'application/json');
+						oReq.send();
 					}
 				}
 			}
@@ -145,6 +171,7 @@
 			taskList.subscribe('add', onNewTask);
 			taskList.subscribe('update', onTaskUpdate);
 			taskList.subscribe('remove', onTaskRemove);
+			taskList.load();
 
 			updateStats();
 			
@@ -159,13 +186,10 @@
 			var btnRemoveCompleted = document.getElementById('btnRemoveCompleted');
 			btnRemoveCompleted.addEventListener('click', onBtnRemoveCompletedClick);
 
-			var btnLoadTasks = document.getElementById('btnLoadTasks');
-			btnLoadTasks.addEventListener('click', onBtnLoadTasksClick);
+			
 		}
 
-		function onBtnLoadTasksClick(){
-			taskList.load();
-		}
+		
 
 		function onNewTask(task){
 			var newTaskItem = document.createElement('li');
@@ -259,7 +283,6 @@
 </head>
 <body>
 	<h1>Task Manager</h1>
-	<input type="button" value="Load Tasks" id="btnLoadTasks">
 	<hr>
 	<section class="stats">
 		<span class="completed" id="completedCount">1</span>
