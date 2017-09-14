@@ -40,7 +40,11 @@
 		function getTaskListModel(){
 			var list = [],
 				currentTaskId = 0,
-				subscribers = [];
+				subscribers = {
+					add : [],
+					update : [],
+					remove : []
+				};
 
 			function getList(){
 				return list.slice(0);
@@ -56,9 +60,10 @@
 				triggerChange('add', newTask);
 			}
 			function triggerChange(evtName, data){
-				for(var index=0, count = subscribers.length; index < count; index++){
-					var subscriber = subscribers[index];
-					subscriber(evtName, data);
+				var eventSubscribers = subscribers[evtName];
+				for(var index=0, count = eventSubscribers.length; index < count; index++){
+					var subscriber = eventSubscribers[index];
+					subscriber(data);
 				}
 			}
 			function toggle(taskId){
@@ -80,8 +85,8 @@
 					}
 				}
 			}
-			function subscribe(fn){
-				subscribers.push(fn);
+			function subscribe(evtName, fn){
+				subscribers[evtName].push(fn);
 			}
 			function getStats(){
 				var completedCount = 0;
